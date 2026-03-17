@@ -1,0 +1,63 @@
+/*
+===============================================================================
+Add KPI analysis queries for business performance insights
+===============================================================================
+Implemented SQL scripts to analyze late delivery percentages by state.
+
+Created revenue trend analysis and payment behavior metrics.
+
+Developed customer loyalty segmentation (One-time vs. Repeat buyers).
+
+Calculated freight-to-revenue ratios to identify logistics cost inefficiencies.
+===============================================================================
+*/
+
+SELECT 
+	customer_state,
+	COUNT(*) AS total_orders,
+	CONCAT(ROUND(SUM(CASE WHEN shipping_performance = 'Late' THEN 1 ELSE 0 END) / COUNT(*) * 100,2),'%') AS late_percent
+FROM gold_ecommerce
+GROUP BY 1
+ORDER BY late_percent DESC;
+
+
+SELECT 
+	report_month,
+	SUM(total_order_value) AS monthly_revenue
+FROM gold_ecommerce
+GROUP BY 1
+ORDER BY 1;
+
+
+SELECT 
+    primary_payment_type,
+    COUNT(order_id) AS order_count,
+    ROUND(AVG(total_order_value), 2) AS avg_order_value,
+    ROUND(AVG(max_installment), 1) AS avg_installments
+FROM gold_ecommerce
+GROUP BY primary_payment_type
+ORDER BY avg_order_value DESC;
+
+
+SELECT 
+customer_state,
+ROUND(AVG(total_freight_value),2) AS avg_freight_value,
+CONCAT(ROUND(AVG(total_freight_value/total_order_value) * 100,2),'%') AS freight_ratio_percentage
+FROM gold_ecommerce
+GROUP BY  1
+ORDER BY freight_ratio_percentage DESC; 
+
+
+WITH customer_orders AS (
+    SELECT 
+        customer_unique_id,
+        COUNT(order_id) AS order_count
+    FROM gold_ecommerce 
+    GROUP BY customer_unique_id
+)
+SELECT 
+    CASE WHEN order_count = 1 THEN 'One-time Buyer' ELSE 'Repeat Customer' END AS loyalty_type,
+    COUNT(*) AS customer_count,
+    CONCAT(ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM customer_orders), 2),'%') AS percentage
+FROM customer_orders
+GROUP BY 1;
