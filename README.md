@@ -35,3 +35,15 @@ Retention Gap: Only 6.08% of customers are repeat buyers, highlighting a critica
 
 The Buffer Insight: Most "On-time" orders arrive 10-15 days before the promised deadline, suggesting Olist's delivery estimates are overly conservative.
 
+### Visual Insights & Analytics
+I created an interactive 3-tier dashboard suite to analyze Brazil's market dynamics.
+
+#### 1. Revenue & Sales Performance
+![Revenue Dashboard]()
+
+#### 2. Logistics & Supply Chain
+![Logistics Dashboard]()
+
+#### 3. Customer Segmentation
+![Customer Dashboard]()
+
