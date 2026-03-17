@@ -34,3 +34,17 @@ Credit Dependency: 75% of revenue is driven by Credit Cards; AOV increases by ~2
 Retention Gap: Only 6.08% of customers are repeat buyers, highlighting a critical need for loyalty programs in the "Health & Beauty" category.
 
 The Buffer Insight: Most "On-time" orders arrive 10-15 days before the promised deadline, suggesting Olist's delivery estimates are overly conservative.
+
+### Visual Insights & Analytics
+I created an interactive 3-tier dashboard suite to analyze Brazil's market dynamics.
+
+#### 1. Revenue & Sales Performance
+![Revenue Dashboard](/Users/aditishah/Desktop/Tableau images)
+
+#### 2. Logistics & Supply Chain
+![Logistics Dashboard](path/to/logistics_img.png)
+
+#### 3. Customer Segmentation
+![Customer Dashboard](path/to/customer_img.png)
+
+👉 **[View Full Interactive Version on Tableau Public](your_link_here)**
