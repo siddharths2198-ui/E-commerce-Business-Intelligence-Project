@@ -39,7 +39,7 @@ The Buffer Insight: Most "On-time" orders arrive 10-15 days before the promised 
 I created an interactive 3-tier dashboard suite to analyze Brazil's market dynamics.
 
 #### 1. Revenue & Sales Performance
-![Revenue Dashboard](Olist Revenue Dashboard (1).png)
+![Revenue Dashboard](Revenue_Dashboard (1).png)
 
 #### 2. Logistics & Supply Chain
 ![Logistics Dashboard]()
