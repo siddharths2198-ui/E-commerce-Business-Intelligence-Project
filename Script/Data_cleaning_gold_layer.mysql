@@ -1,0 +1,76 @@
+/*
+===============================================================================
+Create Gold layer for E-commerce BI reporting
+===============================================================================
+Developed a flattened gold_ecommerce table by joining Silver and Bronze layers.
+
+Implemented CTEs to pre-calculate payment totals and order costs, preventing row duplication.
+
+Added business logic for shipping_performance (Late/On-time/Early) and date formatting for monthly reporting.
+
+Consolidated logistics, geography, and financial metrics into a single table for Tableau consumption.
+===============================================================================
+*/
+
+
+
+
+
+CREATE TABLE gold_ecommerce AS
+WITH aggregate_payments AS(
+-- Pre-calculate payment totals to avoid duplicating rows in the main join
+SELECT 
+	order_id,
+	SUM(payment_value) AS total_payment_value,
+	MAX(payment_type) AS primary_payment_type,
+	MAX(payment_installments) AS max_installment
+FROM bronze_order_payments
+GROUP BY order_id
+),
+aggregate_items AS(
+-- Pre-calculate order costs and item counts
+SELECT 
+	i.order_id,
+	COUNT(i.product_id) AS total_items,
+	SUM(i.price) AS total_item_price,
+	SUM(i.freight_value) AS total_freight_value,
+    MAX(p.product_name) AS top_product_category
+FROM bronze_order_items i
+JOIN silver_products p ON i.product_id = p.product_id
+GROUP BY i.order_id
+)
+SELECT 
+    -- 1. Order Details
+    o.order_id,
+    o.order_status,
+    o.order_purchase_timestamp,
+    DATE_FORMAT(o.order_purchase_timestamp, '%Y-%m-01') AS report_month,
+    
+    -- 2. Logistics Performance
+    o.actual_delivery_days,
+    o.delivery_accuracy,
+    CASE 
+        WHEN o.delivery_accuracy < 0 THEN 'Late'
+        WHEN o.delivery_accuracy BETWEEN 0 AND 3 THEN 'On Time'
+        ELSE 'Early'
+    END AS shipping_performance,
+
+    -- 3. Customer Geography
+    c.customer_unique_id,
+    c.customer_city,
+    c.customer_state,
+    c.customer_id,
+    -- 4. Financials (Clean & Non-duplicated)
+    i.top_product_category,
+    i.total_items,
+    i.total_item_price,
+    i.total_freight_value,
+    (i.total_item_price + i.total_freight_value) AS total_order_value,
+    p.total_payment_value,
+    p.primary_payment_type,
+    p.max_installment
+
+FROM silver_orders o
+JOIN bronze_customers c ON o.customer_id = c.customer_id
+JOIN aggregate_items i ON o.order_id = i.order_id
+JOIN aggregate_payments p ON o.order_id = p.order_id;
