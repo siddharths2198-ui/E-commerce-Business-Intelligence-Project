@@ -42,7 +42,7 @@ I created an interactive 3-tier dashboard suite to analyze Brazil's market dynam
 ![Revenue Dashboard](Revenue_Dashboard.png)
 
 #### 2. Logistics & Supply Chain
-![Logistics Dashboard]()
+![Logistics Dashboard](Logistics_Dashboard.png)
 
 #### 3. Customer Segmentation
 ![Customer Dashboard]()
